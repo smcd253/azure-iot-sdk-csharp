@@ -9,12 +9,13 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 
+
 int temp();
 
-const char* ssid     = "bcaj";
-const char* password = "aaaaaaaaa1";
+const char* ssid     = "Foxtrot";
+const char* password = "8888aaaa";
 
-const char* host = "10.0.0.43";
+const char* host = "10.0.0.37";
 const int port = 13000;
 
 const char* streamId   = "....................";
@@ -49,13 +50,13 @@ void setup() {
 }
 
 
-int ticker = 0;
-double delaySecs = 0.5;
+double ticker = 0.00;
+double delaySecs = 1.0;
 void loop() {
   delay((int)delaySecs * 1000);
 
-  int temp = temperatureGenerator();
-
+  double temp = temperatureGenerator();
+  
   Serial.print("connecting to ");
   Serial.println(host);
   
@@ -66,7 +67,9 @@ void loop() {
     return;
   }
 
-  client.print(temp);
+  String toPrint = "temp: " + String(temp);
+  Serial.println(toPrint);
+  client.print(toPrint);
   
   unsigned long timeout = millis();
   while (client.available() == 0) {
@@ -77,26 +80,28 @@ void loop() {
     }
   }
   
-  // Read all the lines of the reply from server and print them to Serial
-//  while(client.available()){
-//    String line = client.readStringUntil('\r');
-//    Serial.print(line);
-//  }
+  //Read all the lines of the reply from server and print them to Serial
+  while(client.available()){
+    String line = client.readStringUntil('\r');
+    Serial.print(line);
+  }
   
   Serial.println();
   Serial.println("closing connection");
 }
 
-int temperatureGenerator(){
-  if(ticker < 60/delaySecs){ // 
-    ticker++;
+double temperatureGenerator(){
+  if(ticker < 3.1459){ // 
+    ticker += 0.01;
   }
   else{
-    ticker = 0;
+    ticker = 0.00;
   }
-  int minTemp = ticker;
-  int maxTemp = ticker + 10;
   
-  return random(minTemp, maxTemp);
+  double minTemp = 32 + 30*sin(ticker);
+  double maxTemp = 46 + 30*sin(ticker);
+  
+  double temp = random(minTemp, maxTemp);
+  return temp;
 }
 
