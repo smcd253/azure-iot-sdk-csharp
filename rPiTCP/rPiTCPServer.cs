@@ -24,9 +24,9 @@ public class serv {
                           myList.LocalEndpoint );
         Console.WriteLine("Waiting for a connection.....");
         
-        
+        Socket s;
         while(true){
-            Socket s=myList.AcceptSocket();
+            s=myList.AcceptSocket();
             Console.WriteLine("Connection accepted from " + s.RemoteEndPoint);
             
             byte[] b=new byte[100];
