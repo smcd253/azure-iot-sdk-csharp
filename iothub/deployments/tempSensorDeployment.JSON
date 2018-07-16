@@ -1,0 +1,88 @@
+{
+    "id": "rpiedgenewdeployment",
+    "schemaVersion": null,
+    "labels": {},
+    "content": {
+        "modulesContent": {
+            "$edgeAgent": {
+                "properties.desired": {
+                    "schemaVersion": "1.0",
+                    "runtime": {
+                        "type": "docker",
+                        "settings": {
+                            "loggingOptions": "",
+                            "minDockerVersion": "v1.25"
+                        }
+                    },
+                    "systemModules": {
+                        "edgeAgent": {
+                            "type": "docker",
+                            "settings": {
+                                "image": "mcr.microsoft.com/azureiotedge-agent:1.0",
+                                "createOptions": "{}"
+                            }
+                        },
+                        "edgeHub": {
+                            "type": "docker",
+                            "settings": {
+                                "image": "mcr.microsoft.com/azureiotedge-hub:1.0",
+                                "createOptions": "{\n  \"HostConfig\": {\n    \"PortBindings\": {\n      \"8883/tcp\": [\n        {\n          \"HostPort\": \"8883\"\n        }\n      ],\n      \"443/tcp\": [\n        {\n          \"HostPort\": \"443\"\n        }\n      ],\n      \"5671/tcp\": [\n        {\n          \"HostPort\": \"5671\"\n        }\n      ]\n    }\n  }\n}"
+                            },
+                            "status": "running",
+                            "restartPolicy": "always"
+                        }
+                    },
+                    "modules": {
+                        "tempSensor": {
+                            "type": "docker",
+                            "settings": {
+                                "image": "mcr.microsoft.com/azureiotedge-simulated-temperature-sensor:1.0",
+                                "createOptions": "{}"
+                            },
+                            "status": "running",
+                            "restartPolicy": "always",
+                            "version": "1.0"
+                        }
+                    }
+                }
+            },
+            "$edgeHub": {
+                "properties.desired": {
+                    "schemaVersion": "1.0",
+                    "routes": {
+                        "route": "FROM /* INTO $upstream"
+                    },
+                    "storeAndForwardConfiguration": {
+                        "timeToLiveSecs": 7200
+                    }
+                }
+            },
+            "tempSensor": {
+                "properties.desired": {}
+            }
+        }
+    },
+    "targetCondition": "",
+    "createdTimeUtc": "2018-07-15T05:55:58.643Z",
+    "lastUpdatedTimeUtc": "2018-07-15T05:55:58.643Z",
+    "priority": 1,
+    "systemMetrics": {
+        "results": {
+            "appliedCount": 0,
+            "reportedSuccessfulCount": 0,
+            "reportedFailedCount": 0,
+            "targetedCount": 0
+        },
+        "queries": {
+            "Targeted": "",
+            "Applied": "select deviceId from devices.modules where moduleId = '$edgeAgent' and configurations.[[rpiedgenewdeployment]].status = 'Applied'",
+            "Reporting Success": "select deviceId from devices.modules where moduleId = '$edgeAgent' and configurations.[[rpiedgenewdeployment]].status = 'Applied' and properties.desired.$version = properties.reported.lastDesiredVersion and properties.reported.lastDesiredStatus.code = 200",
+            "Reporting Failure": "select deviceId from devices.modules where moduleId = '$edgeAgent' and configurations.[[rpiedgenewdeployment]].status = 'Applied' and properties.desired.$version = properties.reported.lastDesiredVersion and properties.reported.lastDesiredStatus.code != 200"
+        }
+    },
+    "metrics": {
+        "results": {},
+        "queries": {}
+    },
+    "etag": "MQ=="
+}
