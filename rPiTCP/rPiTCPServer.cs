@@ -24,7 +24,7 @@ public class serv {
                           myList.LocalEndpoint );
         Console.WriteLine("Waiting for a connection.....");
         
-        Socket s=myList.AcceptSocket();
+        while(Socket s=myList.AcceptSocket()){
         Console.WriteLine("Connection accepted from " + s.RemoteEndPoint);
         
         byte[] b=new byte[100];
@@ -36,6 +36,8 @@ public class serv {
         ASCIIEncoding asen=new ASCIIEncoding();
         s.Send(asen.GetBytes("The string was recieved by the server."));
         Console.WriteLine("\nSent Acknowledgement");
+        }
+        
 /* clean up */            
         s.Close();
         myList.Stop();
