@@ -25,7 +25,9 @@ public class serv {
                             myList.LocalEndpoint );
             Console.WriteLine("Waiting for a connection.....");
             
-            Socket s=myList.AcceptSocket();
+            Socket s=myList.AcceptSocket(); //blocks thread... try await myList.AcceptSocketAsync();
+            // Socket s = await mList.AcceptSocketAsync();
+            
             Console.WriteLine("Connection accepted from " + s.RemoteEndPoint);
             
             byte[] b=new byte[100];
