@@ -91,13 +91,11 @@ public class AsynchronousSocketListener {
         int bytesRead = handler.EndReceive(ar);  
 
         if (bytesRead > 0) {  
-            Console.Write(Convert.ToChar(bytesRead))
-            
             // There  might be more data, so store the data received so far.  
             state.sb.Append(Encoding.ASCII.GetString(  
                 state.buffer, 0, bytesRead));  
 
-            // Check for new line tag. If it is not there, read   
+            // Check for end-of-file tag. If it is not there, read   
             // more data.  
             content = state.sb.ToString();  
             if (content.IndexOf("\n") > -1) {  
