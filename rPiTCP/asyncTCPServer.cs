@@ -30,7 +30,7 @@ public class AsynchronousSocketListener {
         //IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());  
         //IPAddress ipAddress = ipHostInfo.AddressList[0];  
         IPAddress ipAddress = IPAddress.Parse("10.0.0.37");
-	IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 13000);  
+	    IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 13000);  
 
         // Create a TCP/IP socket.  
         Socket listener = new Socket(ipAddress.AddressFamily,  
@@ -91,14 +91,16 @@ public class AsynchronousSocketListener {
         int bytesRead = handler.EndReceive(ar);  
 
         if (bytesRead > 0) {  
+            Console.Write(Convert.ToChar(bytesRead))
+            
             // There  might be more data, so store the data received so far.  
             state.sb.Append(Encoding.ASCII.GetString(  
                 state.buffer, 0, bytesRead));  
 
-            // Check for end-of-file tag. If it is not there, read   
+            // Check for new line tag. If it is not there, read   
             // more data.  
             content = state.sb.ToString();  
-            if (content.IndexOf("<EOF>") > -1) {  
+            if (content.IndexOf("\n") > -1) {  
                 // All the data has been read from the   
                 // client. Display it on the console.  
                 Console.WriteLine("Read {0} bytes from socket. \n Data : {1}",  
